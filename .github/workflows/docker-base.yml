@@ -1,0 +1,84 @@
+on:
+  push:
+    # Publish `master` as Docker `latest` image.
+    branches:
+      - master
+
+    # Publish `v1.2.3` tags as releases.
+    tags:
+      - v*
+
+    paths:
+      - ".github/workflows/*.yml"
+      - "*.test.yml"
+      - "debian/**"
+      - "ubuntu/**"
+      - "centos/**"
+
+  # Run tests for any PRs.
+  pull_request:
+
+  # Triggered every day.
+  schedule:
+    - cron: "0 0 * * *"
+
+env:
+  REGISTRY: docker.io
+  REGISTRY_USERNAME: ${{ secrets.DOCKER_IO_USERNAME }}
+  REGISTRY_PASSWORD: ${{ secrets.DOCKER_IO_PASSWORD }}
+
+jobs:
+  # Run tests.
+  # See also https://docs.docker.com/docker-hub/builds/automated-testing/
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Run tests
+        env:
+          FILE_PATH: docker-compose.base.test.yml
+        run: |
+          if [ -f $FILE_PATH ]; then
+            docker-compose --file $FILE_PATH build
+          fi
+
+  push:
+    # Ensure test job passes before pushing image.
+    needs: test
+
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event_name == 'schedule'
+
+    strategy:
+      matrix:
+        images:
+          - os: debian
+            feature: ssh
+          - os: ubuntu
+            feature: ssh
+          - os: centos
+            feature: ssh
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build the Docker image
+        env:
+          FILE_NAME: ${{ matrix.images.os }}/${{ matrix.images.feature }}.Dockerfile
+          IMAGE_NAME: ${{ matrix.images.os }}:${{ matrix.images.feature }}
+        run: docker build . --file $FILE_NAME
+          --tag $IMAGE_NAME
+
+      - name: Log into registry
+        run: echo "${{ secrets.DOCKER_IO_PASSWORD }}" |
+          docker login $REGISTRY -u ${{ secrets.DOCKER_IO_USERNAME }} --password-stdin
+
+      - name: Push image
+        env:
+          IMAGE_NAME: ${{ matrix.images.os }}:${{ matrix.images.feature }}
+        run: |
+          IMAGE_ID=$REGISTRY/${{ secrets.DOCKER_IO_USERNAME }}/$IMAGE_NAME
+          docker tag $IMAGE_NAME $IMAGE_ID
+          docker push $IMAGE_ID

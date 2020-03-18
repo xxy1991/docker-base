@@ -1,0 +1,17 @@
+version: "2"
+
+services:
+  debian-ssh:
+    build:
+      context: .
+      dockerfile: "debian/ssh.Dockerfile"
+
+  ubuntu-ssh:
+    build:
+      context: .
+      dockerfile: "ubuntu/ssh.Dockerfile"
+
+  centos-ssh:
+    build:
+      context: .
+      dockerfile: "centos/ssh.Dockerfile"
