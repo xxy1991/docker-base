@@ -33,16 +33,20 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        os: [debian, ubuntu, centos]
+        feature: [ssh, py2, py3, build, ansible]
+
     steps:
       - uses: actions/checkout@v2
 
       - name: Run tests
         env:
-          COMPOSE_FILE: docker-compose.base.test.yml
+          FILE_NAME: ${{ matrix.os }}/${{ matrix.feature }}.Dockerfile
         run: |
-          sudo curl -sL "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-          if [ -f $FILE_PATH ]; then
-            docker-compose build --parallel
+          if [ -f $FILE_NAME ]; then
+            docker build . --file $FILE_NAME
           fi
 
   push:
