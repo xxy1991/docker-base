@@ -38,10 +38,11 @@ jobs:
 
       - name: Run tests
         env:
-          FILE_PATH: docker-compose.base.test.yml
+          COMPOSE_FILE: docker-compose.base.test.yml
         run: |
+          sudo curl -sL "https://github.com/docker/compose/releases/download/1.25.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
           if [ -f $FILE_PATH ]; then
-            docker-compose --file $FILE_PATH build
+            docker-compose build --parallel
           fi
 
   push:
@@ -54,7 +55,7 @@ jobs:
     strategy:
       matrix:
         os: [debian, ubuntu, centos]
-        feature: [ssh, py2, py3, build]
+        feature: [ssh, py2, py3, build, ansible]
 
     steps:
       - uses: actions/checkout@v2
