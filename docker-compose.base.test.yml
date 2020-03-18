@@ -45,3 +45,18 @@ services:
     build:
       context: .
       dockerfile: "centos/py3.Dockerfile"
+
+  debian-build:
+    build:
+      context: .
+      dockerfile: "debian/build.Dockerfile"
+
+  ubuntu-build:
+    build:
+      context: .
+      dockerfile: "ubuntu/build.Dockerfile"
+
+  centos-build:
+    build:
+      context: .
+      dockerfile: "centos/build.Dockerfile"

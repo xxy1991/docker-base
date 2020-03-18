@@ -54,7 +54,7 @@ jobs:
     strategy:
       matrix:
         os: [debian, ubuntu, centos]
-        feature: [ssh, py2, py3]
+        feature: [ssh, py2, py3, build]
 
     steps:
       - uses: actions/checkout@v2
