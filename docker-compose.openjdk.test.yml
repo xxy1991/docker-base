@@ -1,0 +1,12 @@
+version: "2"
+
+services:
+  11-jre-alpine:
+    build:
+      context: .
+      dockerfile: openjdk/11-jre-alpine.Dockerfile
+
+  11-jdk-alpine:
+    build:
+      context: .
+      dockerfile: openjdk/11-jdk-alpine.Dockerfile
