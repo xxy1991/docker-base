@@ -53,21 +53,16 @@ jobs:
 
     strategy:
       matrix:
-        images:
-          - os: debian
-            feature: ssh
-          - os: ubuntu
-            feature: ssh
-          - os: centos
-            feature: ssh
+        os: [debian, ubuntu, centos]
+        feature: [ssh, py2, py3]
 
     steps:
       - uses: actions/checkout@v2
 
       - name: Build the Docker image
         env:
-          FILE_NAME: ${{ matrix.images.os }}/${{ matrix.images.feature }}.Dockerfile
-          IMAGE_NAME: ${{ matrix.images.os }}:${{ matrix.images.feature }}
+          FILE_NAME: ${{ matrix.os }}/${{ matrix.feature }}.Dockerfile
+          IMAGE_NAME: ${{ matrix.os }}:${{ matrix.feature }}
         run: docker build . --file $FILE_NAME
           --tag $IMAGE_NAME
 
@@ -77,7 +72,7 @@ jobs:
 
       - name: Push image
         env:
-          IMAGE_NAME: ${{ matrix.images.os }}:${{ matrix.images.feature }}
+          IMAGE_NAME: ${{ matrix.os }}:${{ matrix.feature }}
         run: |
           IMAGE_ID=$REGISTRY/${{ secrets.DOCKER_IO_USERNAME }}/$IMAGE_NAME
           docker tag $IMAGE_NAME $IMAGE_ID
