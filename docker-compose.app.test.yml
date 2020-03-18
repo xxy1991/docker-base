@@ -1,0 +1,12 @@
+version: "2"
+
+services:
+  apt-cacher:
+    build:
+      context: .
+      dockerfile: app/apt-cacher-ng.Dockerfile
+
+  vlmcsd:
+    build:
+      context: .
+      dockerfile: app/vlmcsd.Dockerfile
