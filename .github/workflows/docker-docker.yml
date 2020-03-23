@@ -9,8 +9,7 @@ on:
       - v*
 
     paths:
-      - ".github/workflows/*.yml"
-      - "*.test.yml"
+      - ".github/workflows/docker-docker.yml"
       - "docker/**"
 
   # Run tests for any PRs.

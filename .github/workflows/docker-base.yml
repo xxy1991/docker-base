@@ -9,8 +9,8 @@ on:
       - v*
 
     paths:
-      - ".github/workflows/*.yml"
-      - "*.test.yml"
+      - ".github/workflows/docker-base.yml"
+      - "*.base.test.yml"
       - "debian/**"
       - "ubuntu/**"
       - "centos/**"
