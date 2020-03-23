@@ -11,6 +11,11 @@ services:
       context: .
       dockerfile: app/vlmcsd.Dockerfile
 
+  isc-dhcpd:
+    build:
+      context: .
+      dockerfile: app/dhcpd/alpine.Dockerfile
+
   mysql-nostrict-5.7:
     build:
       context: .

@@ -58,6 +58,9 @@ jobs:
           - name: vlmcsd
             file: app/vlmcsd.Dockerfile
             image: app:vlmcsd
+          - name: isc-dhcpd
+            file: app/dhcpd/alpine.Dockerfile
+            image: isc-dhcpd:alpine
           - name: nostrict-5.7
             file: app/mysql/nostrict-5.7.Dockerfile
             image: mysql:nostrict-5.7
