@@ -4,7 +4,7 @@ VOLUME ["/var/cache/apt-cacher-ng"]
 RUN apt-get -qq update && DEBIAN_FRONTEND=noninteractive \
     apt-get -yqq install apt-cacher-ng
 
-RUN echo 'PassThroughPattern: .*' \
+RUN echo 'PassThroughPattern: ^(.*):443$' \
     >> /etc/apt-cacher-ng/acng.conf
 
 EXPOSE 3142
