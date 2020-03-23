@@ -10,3 +10,13 @@ services:
     build:
       context: .
       dockerfile: app/vlmcsd.Dockerfile
+
+  mysql-nostrict-5.7:
+    build:
+      context: .
+      dockerfile: app/mysql/nostrict-5.7.Dockerfile
+
+  mysql-pescms-5.7:
+    build:
+      context: .
+      dockerfile: app/mysql/pescms-5.7.Dockerfile

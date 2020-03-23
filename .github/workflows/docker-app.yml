@@ -58,6 +58,12 @@ jobs:
           - name: vlmcsd
             file: app/vlmcsd.Dockerfile
             image: app:vlmcsd
+          - name: nostrict-5.7
+            file: app/mysql/nostrict-5.7.Dockerfile
+            image: mysql:nostrict-5.7
+          - name: pescms-5.7
+            file: app/mysql/pescms-5.7.Dockerfile
+            image: mysql:pescms-5.7
 
     steps:
       - uses: actions/checkout@v2
