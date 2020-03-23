@@ -16,21 +16,6 @@ services:
       context: .
       dockerfile: "centos/ssh.Dockerfile"
 
-  debian-py2:
-    build:
-      context: .
-      dockerfile: "debian/py2.Dockerfile"
-
-  ubuntu-py2:
-    build:
-      context: .
-      dockerfile: "ubuntu/py2.Dockerfile"
-
-  centos-py2:
-    build:
-      context: .
-      dockerfile: "centos/py2.Dockerfile"
-
   debian-py3:
     build:
       context: .
