@@ -1,9 +1,11 @@
-FROM centos:7
+FROM centos:8
+LABEL maintainer="xxy1991"
+ENV container=docker
 
-RUN yum -y -q update && \
-    yum -y -q --setopt=tsflags=nodocs install \
+RUN dnf -y -q upgrade && \
+    dnf -y -q --setopt=tsflags=nodocs install \
     openssh-server passwd && \
-    yum clean all
+    dnf clean all
 
 RUN mkdir /var/run/sshd
 RUN echo 'root:Test123!' | chpasswd

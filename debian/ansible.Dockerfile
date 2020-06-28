@@ -1,5 +1,6 @@
-FROM debian:stretch
+FROM debian:buster
 LABEL maintainer="xxy1991"
+ENV container=docker
 
 ENV pip_packages "ansible cryptography"
 
@@ -11,13 +12,13 @@ RUN apt-get -qq update && DEBIAN_FRONTEND=noninteractive \
     apt-get -yqq --no-install-recommends install \
             sudo systemd systemd-cron \
             build-essential libffi-dev libssl-dev \
-            python-pip python-dev python-setuptools python-wheel && \
+            python3-pip python3-dev python3-setuptools python3-wheel && \
     rm -rf /var/lib/apt/lists/* && \
     rm -Rf /usr/share/doc && rm -Rf /usr/share/man && \
     rm -f /etc/apt/apt.conf
 
 # Install Ansible via pip.
-RUN pip install $pip_packages
+RUN pip3 install $pip_packages
 
 COPY ansible/initctl_faker .
 RUN chmod +x initctl_faker && rm -fr /sbin/initctl && ln -s /initctl_faker /sbin/initctl

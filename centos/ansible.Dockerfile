@@ -1,11 +1,11 @@
-FROM centos:7
+FROM centos:8
 LABEL maintainer="xxy1991"
 ENV container=docker
 
 ENV pip_packages "ansible"
 
 # Install systemd -- See https://hub.docker.com/_/centos/
-RUN yum -y update; yum clean all; \
+RUN dnf -y upgrade; dnf clean all; \
 (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
 rm -f /lib/systemd/system/multi-user.target.wants/*;\
 rm -f /etc/systemd/system/*.wants/*;\
@@ -16,17 +16,16 @@ rm -f /lib/systemd/system/basic.target.wants/*;\
 rm -f /lib/systemd/system/anaconda.target.wants/*;
 
 # Install requirements.
-RUN yum makecache fast \
-&& yum -y install deltarpm epel-release initscripts \
-&& yum -y update \
-&& yum -y install \
+RUN dnf -y install drpm epel-release initscripts \
+&& dnf -y upgrade \
+&& dnf -y install \
 sudo \
 which \
-python-pip \
+python3 \
 && yum clean all
 
 # Install Ansible via Pip.
-RUN pip install $pip_packages
+RUN pip3 install $pip_packages
 
 # Disable requiretty.
 RUN sed -i -e 's/^\(Defaults\s*requiretty\)/#--- \1/' /etc/sudoers

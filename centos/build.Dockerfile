@@ -1,9 +1,11 @@
-FROM centos:7
+FROM centos:8
+LABEL maintainer="xxy1991"
+ENV container=docker
 
-RUN yum -y -q update && \
-    yum -y -q --setopt=tsflags=nodocs \
+RUN dnf -y -q upgrade && \
+    dnf -y -q --setopt=tsflags=nodocs \
     groupinstall 'Development Tools' && \
-    yum -y -q --setopt=tsflags=nodocs \
+    dnf -y -q --setopt=tsflags=nodocs \
     install git \
             curl && \
-    yum clean all
+    dnf clean all

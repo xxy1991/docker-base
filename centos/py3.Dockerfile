@@ -1,11 +1,13 @@
 FROM xxy1991/centos:ssh
+LABEL maintainer="xxy1991"
+ENV container=docker
 
-RUN yum -y -q update && \
-    yum -y -q --setopt=tsflags=nodocs install \
+RUN dnf -y -q upgrade && \
+    dnf -y -q --setopt=tsflags=nodocs install \
     epel-release && \
-    yum clean all
+    dnf clean all
 
-RUN yum -y -q update && \
-    yum -y -q --setopt=tsflags=nodocs install \
-    python36-pip && \
-    yum clean all
+RUN dnf -y -q upgrade && \
+    dnf -y -q --setopt=tsflags=nodocs install \
+    python3 && \
+    dnf clean all

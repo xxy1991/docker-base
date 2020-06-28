@@ -1,5 +1,6 @@
-FROM ubuntu:bionic
+FROM ubuntu:focal
 LABEL maintainer="xxy1991"
+ENV container=docker
 
 ENV pip_packages "ansible"
 
@@ -10,7 +11,7 @@ RUN sh apt-cacher.sh && rm apt-cacher.sh
 RUN apt-get -qq update && DEBIAN_FRONTEND=noninteractive \
     apt-get -yqq --no-install-recommends install \
             apt-utils systemd systemd-cron sudo \
-            python-pip python-setuptools \
+            python3-pip python3-setuptools \
             software-properties-common rsyslog && \
     rm -rf /var/lib/apt/lists/* && \
     rm -Rf /usr/share/doc && rm -Rf /usr/share/man && \
@@ -19,7 +20,7 @@ RUN apt-get -qq update && DEBIAN_FRONTEND=noninteractive \
 RUN sed -i 's/^\($ModLoad imklog\)/#\1/' /etc/rsyslog.conf
 
 # Install Ansible via Pip.
-RUN pip install $pip_packages
+RUN pip3 install $pip_packages
 
 COPY ansible/initctl_faker .
 RUN chmod +x initctl_faker && rm -fr /sbin/initctl && ln -s /initctl_faker /sbin/initctl

@@ -1,4 +1,6 @@
-FROM ubuntu:bionic
+FROM ubuntu:focal
+LABEL maintainer="xxy1991"
+ENV container=docker
 
 COPY app/apt-cacher.sh ./
 RUN sh apt-cacher.sh && rm apt-cacher.sh
