@@ -61,6 +61,9 @@ jobs:
           - name: isc-dhcpd
             file: app/dhcpd/alpine.Dockerfile
             image: isc-dhcpd:alpine
+          - name: n2n
+            file: app/n2n/supernode.Dockerfile
+            image: n2n:supernode-2.8
           - name: nostrict-5.7
             file: app/mysql/nostrict-5.7.Dockerfile
             image: mysql:nostrict-5.7
