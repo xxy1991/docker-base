@@ -1,0 +1,27 @@
+version: "2"
+
+services:
+  alpine-glibc:
+    build:
+      context: ./alpine
+      dockerfile: "alpine/glibc.Dockerfile"
+
+  alpine-jdk6:
+    build:
+      context: ./alpine
+      dockerfile: "alpine/jdk6.Dockerfile"
+
+  alpine-jre6:
+    build:
+      context: ./alpine
+      dockerfile: "alpine/jre6.Dockerfile"
+
+  alpine-jdk11:
+    build:
+      context: ./alpine
+      dockerfile: alpine/jdk11.Dockerfile
+
+  alpine-jre11:
+    build:
+      context: ./alpine
+      dockerfile: alpine/jre11.Dockerfile
