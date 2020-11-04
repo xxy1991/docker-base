@@ -9,9 +9,9 @@ on:
       - v*
 
     paths:
-      - ".github/workflows/docker-openjdk.yml"
-      - "*.openjdk.test.yml"
-      - "openjdk/**"
+      - ".github/workflows/docker-alpine.yml"
+      - "*.alpine.test.yml"
+      - "alpine/**"
 
   # Run tests for any PRs.
   pull_request:
@@ -43,27 +43,21 @@ jobs:
             docker-compose build --parallel
           fi
 
-  push:
+  push-glibc:
     # Ensure test job passes before pushing image.
     needs: test
 
     runs-on: ubuntu-latest
     if: github.event_name == 'push' || github.event_name == 'schedule'
 
-    strategy:
-      matrix:
-        version: [11]
-        feature: [jre, jdk]
-        os: [alpine]
-
     steps:
       - uses: actions/checkout@v2
 
       - name: Build the Docker image
         env:
-          FILE_NAME: openjdk/${{ matrix.version }}-${{ matrix.feature }}-${{ matrix.os }}.Dockerfile
-          IMAGE_NAME: openjdk:${{ matrix.version }}-${{ matrix.feature }}-${{ matrix.os }}
-        run: docker build . --file $FILE_NAME
+          FILE_NAME: alpine/glibc.Dockerfile
+          IMAGE_NAME: alpine:glibc
+        run: docker build ./alpine --file $FILE_NAME
           --tag $IMAGE_NAME
 
       - name: Log into registry
@@ -72,7 +66,43 @@ jobs:
 
       - name: Push image
         env:
-          IMAGE_NAME: openjdk:${{ matrix.version }}-${{ matrix.feature }}-${{ matrix.os }}
+          IMAGE_NAME: alpine:glibc
+        run: |
+          IMAGE_ID=$REGISTRY/${{ secrets.DOCKER_IO_USERNAME }}/$IMAGE_NAME
+          docker tag $IMAGE_NAME $IMAGE_ID
+          docker push $IMAGE_ID
+
+  push-jdk:
+    # Ensure push-glibc job passes before pushing image.
+    needs: push-glibc
+
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || github.event_name == 'schedule'
+
+    strategy:
+      matrix:
+        version: [6, 11]
+        feature: [jdk, jre]
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          lfs: true
+
+      - name: Build the Docker image
+        env:
+          FILE_NAME: alpine/${{ matrix.feature }}${{ matrix.version }}.Dockerfile
+          IMAGE_NAME: alpine:${{ matrix.feature }}${{ matrix.version }}
+        run: docker build ./alpine --file $FILE_NAME
+          --tag $IMAGE_NAME
+
+      - name: Log into registry
+        run: echo "${{ secrets.DOCKER_IO_PASSWORD }}" |
+          docker login $REGISTRY -u ${{ secrets.DOCKER_IO_USERNAME }} --password-stdin
+
+      - name: Push image
+        env:
+          IMAGE_NAME: alpine:${{ matrix.feature }}${{ matrix.version }}
         run: |
           IMAGE_ID=$REGISTRY/${{ secrets.DOCKER_IO_USERNAME }}/$IMAGE_NAME
           docker tag $IMAGE_NAME $IMAGE_ID
