@@ -53,29 +53,44 @@ jobs:
       matrix:
         feature:
           - name: cacher
+            context: .
             file: app/apt-cacher-ng.Dockerfile
             image: app:cacher
           - name: vlmcsd
+            context: .
             file: app/vlmcsd.Dockerfile
             image: app:vlmcsd
           - name: isc-dhcpd
+            context: .
             file: app/dhcpd/alpine.Dockerfile
             image: isc-dhcpd:alpine
           - name: n2n
+            context: .
             file: app/n2n/supernode.Dockerfile
             image: n2n:supernode-2.8
           - name: nostrict-5.7
+            context: .
             file: app/mysql/nostrict-5.7.Dockerfile
             image: mysql:nostrict-5.7
           - name: pescms-5.7
+            context: .
             file: app/mysql/pescms-5.7.Dockerfile
             image: mysql:pescms-5.7
+          - name: tomcat-7.0.23-jdk6
+            context: app/tomcat
+            file: app/tomcat/tomcat-7.0.23-jdk6.Dockerfile
+            image: tomcat:7.0.23-jdk6
+          - name: tomcat-7.0.23-jre6
+            context: app/tomcat
+            file: app/tomcat/tomcat-7.0.23-jre6.Dockerfile
+            image: tomcat:7.0.23-jre6
 
     steps:
       - uses: actions/checkout@v2
 
       - name: Build the Docker image
-        run: docker build . --file ${{ matrix.feature.file }}
+        run: docker build ${{ matrix.feature.context }}
+          --file ${{ matrix.feature.file }}
           --tag ${{ matrix.feature.image }}
 
       - name: Log into registry

@@ -25,3 +25,13 @@ services:
     build:
       context: .
       dockerfile: app/mysql/pescms-5.7.Dockerfile
+
+  tomcat-7.0.23-jdk6:
+    build:
+      context: app/tomcat
+      dockerfile: tomcat-7.0.23-jdk6.Dockerfile
+
+  tomcat-7.0.23-jre6:
+    build:
+      context: app/tomcat
+      dockerfile: tomcat-7.0.23-jre6.Dockerfile
