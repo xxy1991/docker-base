@@ -12,9 +12,9 @@ ENV LD_LIBRARY_PATH ${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}$TOMCAT_NATIVE_LIBDIR
 ENV TOMCAT_MAJOR 7
 ENV TOMCAT_VERSION 7.0.23
 
-COPY apache-tomcat-7.0.23.tar.gz tomcat.tar.gz
-
-RUN tar -xf tomcat.tar.gz --strip-components=1; \
+RUN wget -q -O tomcat.tar.gz \
+	https://develop.xxy.fyi/archived/apache-tomcat-7.0.23.tar.gz && \
+	tar -xf tomcat.tar.gz --strip-components=1; \
 	rm bin/*.bat; \
 	rm tomcat.tar.gz*; \
 	\
