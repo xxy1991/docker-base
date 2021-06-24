@@ -64,6 +64,10 @@ jobs:
             context: .
             file: app/dhcpd/alpine.Dockerfile
             image: isc-dhcpd:alpine
+          - name: logstash
+            context: .
+            file: app/logstash/aliyun.Dockerfile
+            image: logstash:aliyun
           - name: n2n
             context: .
             file: app/n2n/supernode.Dockerfile
